@@ -1,0 +1,12 @@
+steps:
+  # building the container image
+  - name: 'gcr.io/cloud-builders/docker'
+    args: ['build', '-t', 'gcr.io/$PROJECT_ID/gcs-s3-object-transfer', '.']
+
+  # pushing the container image
+  - name: 'gcr.io/cloud-builders/docker'
+    args: ['push', 'gcr.io/$PROJECT_ID/gcs-s3-object-transfer']
+
+  # Deploying container image to Cloud Run
+  - name: "gcr.io/cloud-builders/gcloud"
+    args: ['beta', 'run', 'deploy', 'gcs-s3-object-transfer', '--image', 'gcr.io/$PROJECT_ID/gcs-s3-object-transfer', '--region', 'us-central1', '--allow-unauthenticated', '--platform', 'managed']
